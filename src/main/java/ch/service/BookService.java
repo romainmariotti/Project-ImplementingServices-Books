@@ -1,6 +1,8 @@
 package ch.service;
 
 import ch.hevs.businessobject.Book;
+import ch.hevs.businessobject.Category;
+import ch.hevs.businessobject.Writer;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

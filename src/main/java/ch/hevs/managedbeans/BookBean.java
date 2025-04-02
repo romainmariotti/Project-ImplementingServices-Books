@@ -18,31 +18,141 @@ public class BookBean implements Serializable {
     private BookServiceLocal bookService;
 
     private List<Book> books;
+    private List<Book> filteredBooks; // New list for filtered results
     private Book selectedBook;
+    private String selectedType; // "Magazine", "Comic", or "Novel"
+    private List<Category> categories;
+    private List<Writer> writers;
+
+    
+    
+    // Filter properties
+    private String categoryFilter;
+    private String writerFilter;
+    private String titleFilter;
+    
+    
 
     @PostConstruct
     public void init() {
         books = bookService.getBooksByCategory("All"); // Charger tous les livres par défaut
+        filteredBooks = books; // Initialize with all books
+        categories = bookService.getAllCategories();
+        writers = bookService.getAllWriters();
+    }
+    
+    
+    
+    public String addBook(Book book) {
+        try {
+            // Set type-specific properties based on the selected type
+            if ("Magazine".equals(selectedType)) {
+                Magazine magazine = (Magazine) book;
+                magazine.setReleaseFrequency(getAsMagazine().getReleaseFrequency());
+                bookService.addBook(magazine);
+            } 
+            else if ("Comic".equals(selectedType)) {
+                Comic comic = (Comic) book;
+                comic.setColorized(getAsComic().isColorized());
+                bookService.addBook(comic);
+            } 
+            else if ("Novel".equals(selectedType)) {
+                Novel novel = (Novel) book;
+                novel.setPocketSize(getAsNovel().isPocketSize());
+                bookService.addBook(novel);
+            }
+            
+            // Refresh the book list
+            books = bookService.getBooksByCategory("All");
+            filteredBooks = books;
+            
+            // Reset the form
+            selectedBook = null;
+            selectedType = null;
+            
+            return "viewBooks.xhtml?faces-redirect=true"; // Redirect to view page
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Stay on same page if error occurs
+        }
+    }
+    
+    
+    
+ // Called when book type is selected
+    public void onTypeChange() {
+        if ("Magazine".equals(selectedType)) {
+            selectedBook = new Magazine();
+        } else if ("Comic".equals(selectedType)) {
+            selectedBook = new Comic();
+        } else if ("Novel".equals(selectedType)) {
+            selectedBook = new Novel();
+        }
+    }
+    
+ // Getters and setters
+    public String getSelectedType() {
+        return selectedType;
     }
 
-    public void addBook(Book book) {
-        bookService.addBook(book);
-        books = bookService.getBooksByCategory("All"); // Rafraîchir la liste
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
+        onTypeChange(); // Update selectedBook when type changes
     }
 
-    public void updateBook(Book book) {
-        bookService.updateBook(book);
-        books = bookService.getBooksByCategory("All"); // Rafraîchir la liste
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void deleteBook(Long bookId) {
-        bookService.deleteBook(bookId);
-        books = bookService.getBooksByCategory("All"); // Rafraîchir la liste
+    public List<Writer> getWriters() {
+        return writers;
+    }
+    
+    public Magazine getAsMagazine() {
+        return (selectedBook instanceof Magazine) ? (Magazine) selectedBook : null;
     }
 
-    // Getters et setters
+    public Comic getAsComic() {
+        return (selectedBook instanceof Comic) ? (Comic) selectedBook : null;
+    }
+
+    public Novel getAsNovel() {
+        return (selectedBook instanceof Novel) ? (Novel) selectedBook : null;
+    }
+    
+ // Filter methods
+    public void filterByCategory() {
+        if (categoryFilter == null || categoryFilter.isEmpty()) {
+            filteredBooks = books;
+        } else {
+            filteredBooks = bookService.getBooksByCategory(categoryFilter);
+        }
+    }
+
+    public void filterByWriter() {
+        if (writerFilter == null || writerFilter.isEmpty()) {
+            filteredBooks = books;
+        } else {
+            filteredBooks = bookService.getBooksByWriter(writerFilter);
+        }
+    }
+
+    public void filterByTitle() {
+        if (titleFilter == null || titleFilter.isEmpty()) {
+            filteredBooks = books;
+        } else {
+            filteredBooks = bookService.getBooksByTitle(titleFilter);
+        }
+    }
+
+
+    // Getters and setters
     public List<Book> getBooks() {
         return books;
+    }
+
+    public List<Book> getFilteredBooks() {
+        return filteredBooks;
     }
 
     public Book getSelectedBook() {
@@ -52,4 +162,30 @@ public class BookBean implements Serializable {
     public void setSelectedBook(Book selectedBook) {
         this.selectedBook = selectedBook;
     }
+
+    public String getCategoryFilter() {
+        return categoryFilter;
+    }
+
+    public void setCategoryFilter(String categoryFilter) {
+        this.categoryFilter = categoryFilter;
+    }
+
+    public String getWriterFilter() {
+        return writerFilter;
+    }
+
+    public void setWriterFilter(String writerFilter) {
+        this.writerFilter = writerFilter;
+    }
+
+    public String getTitleFilter() {
+        return titleFilter;
+    }
+
+    public void setTitleFilter(String titleFilter) {
+        this.titleFilter = titleFilter;
+    }
 }
+
+   
