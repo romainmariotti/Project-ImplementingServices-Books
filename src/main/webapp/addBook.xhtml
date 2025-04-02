@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+>
+  <h:body>
+    <h:form>
+      <h:outputLabel value="Select Book Type: " />
+      <h:selectOneMenu value="#{bookBean.selectedType}" onchange="submit()">
+        <f:selectItem itemValue="Magazine" itemLabel="Magazine" />
+        <f:selectItem itemValue="Comic" itemLabel="Comic" />
+        <f:selectItem itemValue="Novel" itemLabel="Novel" />
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2" rendered="#{bookBean.book != null}">
+        <h:outputLabel value="Title: " />
+        <h:inputText value="#{bookBean.selectedBook.title}" />
+
+        <h:outputLabel value="Category: " />
+        <h:selectOneMenu value="#{bookBean.selectedBook.category}">
+          <f:selectItems
+            value="#{bookBean.categories}"
+            var="category"
+            itemValue="#{category}"
+            itemLabel="#{category.name}"
+          />
+        </h:selectOneMenu>
+
+        <h:outputLabel value="Writer: " />
+        <h:selectOneMenu value="#{bookBean.selectedBook.writer}">
+          <f:selectItems
+            value="#{bookBean.writers}"
+            var="writer"
+            itemValue="#{writer}"
+            itemLabel="#{writer.firstname} #{writer.lastname}"
+          />
+        </h:selectOneMenu>
+
+        <h:outputLabel
+          value="Release Frequency: "
+          rendered="#{bookBean.book instanceof Magazine}"
+        />
+        <h:inputText
+          value="#{bookBean.book.releaseFrequency}"
+          rendered="#{bookBean.book instanceof Magazine}"
+        />
+
+        <h:outputLabel
+          value="Colorized: "
+          rendered="#{bookBean.book instanceof Comic}"
+        />
+        <h:selectBooleanCheckbox
+          value="#{bookBean.book.colorized}"
+          rendered="#{bookBean.book instanceof Comic}"
+        />
+
+        <h:outputLabel
+          value="Pocket Size: "
+          rendered="#{bookBean.book instanceof Novel}"
+        />
+        <h:selectBooleanCheckbox
+          value="#{bookBean.book.pocketSize}"
+          rendered="#{bookBean.book instanceof Novel}"
+        />
+      </h:panelGrid>
+
+      <h:commandButton
+        value="Save"
+        action="#{bookBean.addBook(bookBean.selectedBook)}"
+        rendered="#{bookBean.book != null}"
+      />
+    </h:form>
+  </h:body>
+</html>
