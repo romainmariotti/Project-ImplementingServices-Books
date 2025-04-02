@@ -1,11 +1,18 @@
 package ch.hevs.test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
-import ch.hevs.businessobject.Account;
-import ch.hevs.businessobject.Client;
+import ch.hevs.businessobject.Book;
+import ch.hevs.businessobject.Category;
+import ch.hevs.businessobject.Comic;
+import ch.hevs.businessobject.Magazine;
+import ch.hevs.businessobject.Novel;
+import ch.hevs.businessobject.Writer;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -20,29 +27,35 @@ public class PopulateDB extends TestCase {
 		EntityTransaction tx = null;
 		try {
 			
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU_unitTest");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("bookPU_unitTest");
 			EntityManager em = emf.createEntityManager();
 			tx = em.getTransaction();
 			tx.begin();
-		
-			Client c1 = new Client("Zinedine", "Zidane");
-			Account a1 = new Account("1000", 10000, c1, "Compte Courant");
 			
-			Client c2 = new Client("Michel", "Platini");
-			Account a2 = new Account("1001", 20000, c2, "Compte Courant");
-			Account a3 = new Account("1003", 1000, c2, "Livret A");
-	
-			Client c3 = new Client("Jean-Pierre", "Papin");
-			Account a4 = new Account("1002", 30000, c3, "Compte Courant");
-	
+			
+			Category c1 = new Category();
+			c1.setName("Fantastique");
+			
+			Writer w1 = new Writer();
+			w1.setFirstname("Jean");
+			w1.setLastname("Dupont");
+			
+			Magazine m1 = new Magazine();
+			m1.setTitle("Le Petit Prince");
+			//m1.setWriter(w1);
+			//m1.setCategory(c1);
+			
+			
+			List<Book> books = new ArrayList<>();
+			books.add(m1);
+			
+			c1.setBooks(books);
+			w1.setBooks(books);
+			
+			
 			em.persist(c1);
-			em.persist(c2);
-			em.persist(c3);
-			
-			em.persist(a1);
-			em.persist(a2);
-			em.persist(a3);
-			em.persist(a4);
+			em.persist(w1);
+			em.persist(m1);
 			tx.commit();
 
 		} catch (Exception e) {
