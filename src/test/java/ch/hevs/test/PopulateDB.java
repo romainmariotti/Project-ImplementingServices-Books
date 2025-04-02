@@ -46,16 +46,15 @@ public class PopulateDB extends TestCase {
 			//m1.setCategory(c1);
 			
 			
-			List<Book> books = new ArrayList<>();
-			books.add(m1);
 			
-			c1.setBooks(books);
-			w1.setBooks(books);
+			c1.addBook(m1);
+			w1.addBook(m1);
 			
 			
+			
+			em.persist(m1);
 			em.persist(c1);
 			em.persist(w1);
-			em.persist(m1);
 			tx.commit();
 
 		} catch (Exception e) {
