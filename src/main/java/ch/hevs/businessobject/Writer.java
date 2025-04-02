@@ -13,7 +13,7 @@ public class Writer {
     private String firstname;
     private String lastname;
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Book> books;
 
     // Getters and setters
