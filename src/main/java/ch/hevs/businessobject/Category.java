@@ -2,6 +2,7 @@ package ch.hevs.businessobject;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Category {
@@ -38,5 +39,20 @@ public class Category {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public void addBook(Book book) {
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        books.add(book);
+        book.setCategory(this); // Maintenir la cohérence bidirectionnelle
+    }
+
+    public void removeBook(Book book) {
+        if (books != null) {
+            books.remove(book);
+            book.setCategory(null); // Supprimer la relation bidirectionnelle
+        }
     }
 }
