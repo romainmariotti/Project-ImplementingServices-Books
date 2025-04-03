@@ -7,12 +7,28 @@
   <h:body>
     <h:form>
       <h:outputLabel value="Filter by Category: " />
-      <h:inputText value="#{bookBean.categoryFilter}" />
-      <h:commandButton value="Search" action="#{bookBean.filterByCategory}" />
+      <h:selectOneMenu value="#{bookBean.categoryFilter}" onchange="submit()">
+        <f:selectItem itemValue="" itemLabel="All Categories" />
+        <f:selectItems
+          value="#{bookBean.categories}"
+          var="category"
+          itemValue="#{category.name}"
+          itemLabel="#{category.name}"
+        />
+      </h:selectOneMenu>
 
       <h:outputLabel value="Filter by Writer: " />
-      <h:inputText value="#{bookBean.writerFilter}" />
-      <h:commandButton value="Search" action="#{bookBean.filterByWriter}" />
+      <h:selectOneMenu value="#{bookBean.writerFilter}" onchange="submit()">
+        <f:selectItem itemValue="" itemLabel="All Writers" />
+        <f:selectItems
+          value="#{bookBean.writers}"
+          var="writer"
+          itemValue="#{writer.firstname} #{writer.lastname}"
+          itemLabel="#{writer.firstname} #{writer.lastname}"
+        />
+      </h:selectOneMenu>
+
+      <h:commandButton value="Search" action="#{bookBean.filterByCategory}" />
 
       <h:outputLabel value="Filter by Title: " />
       <h:inputText value="#{bookBean.titleFilter}" />
