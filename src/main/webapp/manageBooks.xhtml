@@ -11,17 +11,7 @@
           <f:facet name="header">Title</f:facet>
           #{book.title}
         </h:column>
-        <h:column>
-          <f:facet name="header">Actions</f:facet>
-          <h:commandButton
-            value="Edit"
-            action="#{bookBean.setSelectedBook(book)}"
-          />
-          <h:commandButton
-            value="Delete"
-            action="#{bookBean.deleteBook(book.id)}"
-          />
-        </h:column>
+        
       </h:dataTable>
       <h:commandButton value="Add New Book" action="addBook.xhtml" />
     </h:form>
