@@ -35,7 +35,7 @@ public class BookBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        books = bookService.getBooksByCategory("All"); // Charger tous les livres par défaut
+        books = bookService.getAllBooks(); // Charger tous les livres par défaut
         filteredBooks = books; // Initialize with all books
         categories = bookService.getAllCategories();
         writers = bookService.getAllWriters();
