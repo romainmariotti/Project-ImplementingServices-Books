@@ -5,6 +5,8 @@ import ch.service.BookServiceLocal;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -76,6 +78,32 @@ public class BookBean implements Serializable {
             return null; // Stay on same page if error occurs
         }
     }
+    
+    
+    
+    
+    public void deleteBook(Book book) {
+        try {
+            // Remove from database
+            bookService.deleteBook(book.getId());
+            
+            // Remove from current lists
+            books.remove(book);
+            filteredBooks.remove(book);
+            
+            // Show success message
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Success", "Book deleted successfully"));
+        } catch (Exception e) {
+            // Show error message
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Error", "Could not delete book: " + e.getMessage()));
+            e.printStackTrace();
+        }
+    }
+    
     
     
     

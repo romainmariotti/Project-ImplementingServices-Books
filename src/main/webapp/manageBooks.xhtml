@@ -11,9 +11,14 @@
           <f:facet name="header">Title</f:facet>
           #{book.title}
         </h:column>
+        <h:column>
+          <f:facet name="header">Actions</f:facet>
+          <h:commandButton value="Add New Book" action="addBook.xhtml" />
+          <h:commandButton value="Delete" action="#{bookBean.deleteBook(book)}" onclick="return confirm('Are you sure you want to delete this book?')"/>
+        </h:column>
         
       </h:dataTable>
-      <h:commandButton value="Add New Book" action="addBook.xhtml" />
+      
     </h:form>
   </h:body>
 </html>
