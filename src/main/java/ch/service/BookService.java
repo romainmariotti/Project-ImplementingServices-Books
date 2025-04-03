@@ -15,12 +15,7 @@ public class BookService implements BookServiceLocal {
     @PersistenceContext(unitName = "bookPU")
     private EntityManager em;
 
-    @PostConstruct
-    private void populateDatabaseIfEmpty() {
-        if (getAllBooks().isEmpty()) {
-            // Call PopulateDB logic here or replicate it
-        }
-    }
+   
 
     public List<Book> getBooksByCategory(String categoryName) {
         return em.createQuery("SELECT b FROM Book b WHERE b.category.name = :categoryName", Book.class)

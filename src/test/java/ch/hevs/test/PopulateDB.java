@@ -9,10 +9,14 @@ public class PopulateDB extends TestCase {
 
     @Test
     public void test() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
         EntityTransaction tx = null;
+
         try {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("bookPU_unitTest");
-            EntityManager em = emf.createEntityManager();
+            System.out.println("Starting to populate database...");
+            emf = Persistence.createEntityManagerFactory("bookTestPU");
+            em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
 
@@ -51,10 +55,37 @@ public class PopulateDB extends TestCase {
             em.persist(b6); em.persist(b7); em.persist(b8); em.persist(b9); em.persist(b10);
 
             tx.commit();
+            System.out.println("Database populated successfully!");
+
         } catch (Exception e) {
+            System.err.println("Error populating database:");
             e.printStackTrace();
             if (tx != null && tx.isActive()) {
                 tx.rollback();
+            }
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+
+        // Force HSQLDB to write changes to disk using a new EntityManager
+        try {
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+          //  em.createNativeQuery("SHUTDOWN").executeUpdate();
+            tx.commit();
+            System.out.println("Database shutdown completed successfully.");
+        } catch (Exception e) {
+            System.err.println("Error during shutdown:");
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+            if (emf != null && emf.isOpen()) {
+                emf.close();
             }
         }
     }
