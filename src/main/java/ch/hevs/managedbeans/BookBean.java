@@ -7,6 +7,7 @@ import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -101,6 +102,46 @@ public class BookBean implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Error", "Could not delete book: " + e.getMessage()));
             e.printStackTrace();
+        }
+    }
+    
+    
+    
+    public String prepareModifyBook(Book book) {
+        this.selectedBook = book;
+        
+        // Determine the book type
+        if (book instanceof Magazine) {
+            selectedType = "Magazine";
+        } else if (book instanceof Comic) {
+            selectedType = "Comic";
+        } else if (book instanceof Novel) {
+            selectedType = "Novel";
+        }
+        
+        return "modifyBook.xhtml?faces-redirect=true";
+    }
+
+    public String modifyBook() {
+        try {
+            bookService.updateBook(selectedBook);
+            
+            // Refresh the book list
+            books = bookService.getAllBooks();
+            filteredBooks = books;
+            
+            // Show success message
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Success", "Book modified successfully"));
+            
+            return "viewBooks.xhtml?faces-redirect=true";
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Error", "Could not modify book: " + e.getMessage()));
+            e.printStackTrace();
+            return null;
         }
     }
     
