@@ -10,7 +10,9 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Named("bookBean")
@@ -189,29 +191,85 @@ public class BookBean implements Serializable {
         return (selectedBook instanceof Novel) ? (Novel) selectedBook : null;
     }
     
- // Filter methods
+ // Filtering methods
     public void filterByCategory() {
         if (categoryFilter == null || categoryFilter.isEmpty()) {
-            filteredBooks = books;
+            filteredBooks = books; // Show all if no filter
         } else {
             filteredBooks = bookService.getBooksByCategory(categoryFilter);
         }
+        // Also apply other active filters
+        applyWriterFilter();
+        applyTitleFilter();
     }
 
     public void filterByWriter() {
         if (writerFilter == null || writerFilter.isEmpty()) {
-            filteredBooks = books;
+            filteredBooks = books; // Show all if no filter
         } else {
             filteredBooks = bookService.getBooksByWriter(writerFilter);
         }
+        // Also apply other active filters
+        applyCategoryFilter();
+        applyTitleFilter();
     }
 
     public void filterByTitle() {
         if (titleFilter == null || titleFilter.isEmpty()) {
-            filteredBooks = books;
+            filteredBooks = books; // Show all if no filter
         } else {
             filteredBooks = bookService.getBooksByTitle(titleFilter);
         }
+        // Also apply other active filters
+        applyCategoryFilter();
+        applyWriterFilter();
+    }
+    
+ // Helper methods for combined filtering
+    private void applyCategoryFilter() {
+        if (categoryFilter != null && !categoryFilter.isEmpty()) {
+            filteredBooks = filteredBooks.stream()
+                .filter(b -> b.getCategory() != null && 
+                       categoryFilter.equals(b.getCategory().getName()))
+                .collect(Collectors.toList());
+        }
+    }
+
+    private void applyWriterFilter() {
+        if (writerFilter != null && !writerFilter.isEmpty()) {
+            filteredBooks = filteredBooks.stream()
+                .filter(b -> b.getWriter() != null && 
+                       writerFilter.equals(b.getWriter().getFirstname() + " " + b.getWriter().getLastname()))
+                .collect(Collectors.toList());
+        }
+    }
+
+    private void applyTitleFilter() {
+        if (titleFilter != null && !titleFilter.isEmpty()) {
+            filteredBooks = filteredBooks.stream()
+                .filter(b -> b.getTitle() != null && 
+                       b.getTitle().toLowerCase().contains(titleFilter.toLowerCase()))
+                .collect(Collectors.toList());
+        }
+    }
+    
+    
+    public void applyFilters() {
+        // Start fresh with all books
+        filteredBooks = new ArrayList<>(books);
+        
+        // Apply each filter in sequence
+        applyCategoryFilter();
+        applyWriterFilter();
+        applyTitleFilter();
+    }
+    
+    
+    public void resetFilters() {
+        categoryFilter = null;
+        writerFilter = null;
+        titleFilter = null;
+        filteredBooks = books;
     }
 
 
