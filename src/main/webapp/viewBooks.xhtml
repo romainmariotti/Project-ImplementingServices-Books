@@ -6,36 +6,55 @@
 >
   <h:body>
     <h:form>
-      <h:outputLabel value="Filter by Category: " />
-      <h:selectOneMenu value="#{bookBean.categoryFilter}" onchange="submit()">
-        <f:selectItem itemValue="" itemLabel="All Categories" />
-        <f:selectItems
-          value="#{bookBean.categories}"
-          var="category"
-          itemValue="#{category.name}"
-          itemLabel="#{category.name}"
-        />
-      </h:selectOneMenu>
+    
+      <!-- Filters -->
+      <h:panelGrid columns="3">
+        <!-- Category Filter -->
+        <h:outputLabel value="Filter by Category: " />
+        <h:selectOneMenu value="#{bookBean.categoryFilter}">
+          <f:selectItem itemValue="" itemLabel="All Categories" />
+          <f:selectItems
+            value="#{bookBean.categories}"
+            var="category"
+            itemValue="#{category.name}"
+            itemLabel="#{category.name}"
+          />
+        </h:selectOneMenu>
+      
+        <!-- Writer Filter -->
+        <h:outputLabel value="Filter by Writer: " />
+        <h:selectOneMenu value="#{bookBean.writerFilter}">
+          <f:selectItem itemValue="" itemLabel="All Writers" />
+          <f:selectItems
+            value="#{bookBean.writers}"
+            var="writer"
+            itemValue="#{writer.firstname} #{writer.lastname}"
+            itemLabel="#{writer.firstname} #{writer.lastname}"
+          />
+        </h:selectOneMenu>
+     
+        <!-- Title Filter -->
+        <h:outputLabel value="Filter by Title: " />
+        <h:inputText value="#{bookBean.titleFilter}" />
+      </h:panelGrid>
+        
+        
+        
+        
+       <!-- Buttons -->
+      <h:panelGrid columns="1">
+        <!-- Apply filters button -->
+        <h:commandButton value="Apply Filters" action="#{bookBean.applyFilters}" />
+        
+        <!-- Reset filters button -->
+        <h:commandButton value="Reset Filters" action="#{bookBean.resetFilters}" />
+      </h:panelGrid>
 
-      <h:outputLabel value="Filter by Writer: " />
-      <h:selectOneMenu value="#{bookBean.writerFilter}" onchange="submit()">
-        <f:selectItem itemValue="" itemLabel="All Writers" />
-        <f:selectItems
-          value="#{bookBean.writers}"
-          var="writer"
-          itemValue="#{writer.firstname} #{writer.lastname}"
-          itemLabel="#{writer.firstname} #{writer.lastname}"
-        />
-      </h:selectOneMenu>
 
-      <h:commandButton value="Search" action="#{bookBean.filterByCategory}" />
 
-      <h:outputLabel value="Filter by Title: " />
-      <h:inputText value="#{bookBean.titleFilter}" />
-      <h:commandButton value="Search" action="#{bookBean.filterByTitle}" />
-
-      <h:dataTable value="#{bookBean.filteredBooks}" var="book">
-        <h:column>
+      <!-- (filtered) Books -->
+      <h:dataTable value="#{bookBean.filteredBooks}" var="book" style="border-collapse: separate; border-spacing: 50px 5px;">
+      	<h:column>
           <f:facet name="header">Title</f:facet>
           #{book.title}
         </h:column>
@@ -46,8 +65,9 @@
         <h:column>
           <f:facet name="header">Writer</f:facet>
           #{book.writer.firstname} #{book.writer.lastname}
-        </h:column>
+        </h:column>    
       </h:dataTable>
+      
     </h:form>
   </h:body>
 </html>
