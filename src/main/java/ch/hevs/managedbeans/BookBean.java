@@ -40,8 +40,17 @@ public class BookBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        books = bookService.getAllBooks(); // Charger tous les livres par défaut
-        filteredBooks = books; // Initialize with all books
+        //books = bookService.getAllBooks(); // Charger tous les livres par défaut
+        //filteredBooks = books; // Initialize with all books
+        //categories = bookService.getAllCategories();
+        //writers = bookService.getAllWriters();
+    	refreshBooks();
+    }
+    
+    
+    private void refreshBooks() {
+        books = bookService.getAllBooks();
+        filteredBooks = new ArrayList<>(books);
         categories = bookService.getAllCategories();
         writers = bookService.getAllWriters();
     }
@@ -68,8 +77,8 @@ public class BookBean implements Serializable {
             }
             
             // Refresh the book list
-            books = bookService.getBooksByCategory("All");
-            filteredBooks = books;
+            books = bookService.getAllBooks();
+            filteredBooks = new ArrayList<>(books);
             
             // Reset the form
             selectedBook = null;
