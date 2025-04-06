@@ -3,6 +3,7 @@ package ch.service;
 import ch.hevs.businessobject.Book;
 import ch.hevs.businessobject.Category;
 import ch.hevs.businessobject.Writer;
+import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,6 +15,7 @@ public class BookService implements BookServiceLocal {
     @PersistenceContext(unitName = "bookPU")
     private EntityManager em;
 
+   
 
     public List<Book> getBooksByCategory(String categoryName) {
         return em.createQuery("SELECT b FROM Book b WHERE b.category.name = :categoryName", Book.class)
