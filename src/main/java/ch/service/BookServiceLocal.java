@@ -15,4 +15,6 @@ public interface BookServiceLocal {
     void addBook(Book book);
     void updateBook(Book book);
     void deleteBook(Long bookId);
+    Category findCategoryById(Long id);
+    Writer findWriterById(Long id);
 }

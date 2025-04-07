@@ -66,4 +66,14 @@ public class BookService implements BookServiceLocal {
     public List<Book> getAllBooks() {
         return em.createQuery("SELECT b FROM Book b", Book.class).getResultList();
     }
+
+    @Override
+    public Category findCategoryById(Long id) {
+        return em.find(Category.class, id);
+    }
+
+    @Override
+    public Writer findWriterById(Long id) {
+        return em.find(Writer.class, id);
+    }
 }

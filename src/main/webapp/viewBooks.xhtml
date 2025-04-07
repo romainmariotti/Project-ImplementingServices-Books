@@ -6,11 +6,10 @@
 >
   <h:body>
     <h:form>
-    
       <!-- Filters -->
       <h:panelGrid columns="3">
         <!-- Category Filter -->
-        <h:outputLabel value="Filter by Category: " />
+        <h:outputLabel value="Filter by Categoryyy: " />
         <h:selectOneMenu value="#{bookBean.categoryFilter}">
           <f:selectItem itemValue="" itemLabel="All Categories" />
           <f:selectItems
@@ -20,7 +19,7 @@
             itemLabel="#{category.name}"
           />
         </h:selectOneMenu>
-      
+
         <!-- Writer Filter -->
         <h:outputLabel value="Filter by Writer: " />
         <h:selectOneMenu value="#{bookBean.writerFilter}">
@@ -32,29 +31,34 @@
             itemLabel="#{writer.firstname} #{writer.lastname}"
           />
         </h:selectOneMenu>
-     
+
         <!-- Title Filter -->
         <h:outputLabel value="Filter by Title: " />
         <h:inputText value="#{bookBean.titleFilter}" />
       </h:panelGrid>
-        
-        
-        
-        
-       <!-- Buttons -->
+
+      <!-- Buttons -->
       <h:panelGrid columns="1">
         <!-- Apply filters button -->
-        <h:commandButton value="Apply Filters" action="#{bookBean.applyFilters}" />
-        
+        <h:commandButton
+          value="Apply Filters"
+          action="#{bookBean.applyFilters}"
+        />
+
         <!-- Reset filters button -->
-        <h:commandButton value="Reset Filters" action="#{bookBean.resetFilters}" />
+        <h:commandButton
+          value="Reset Filters"
+          action="#{bookBean.resetFilters}"
+        />
       </h:panelGrid>
 
-
-
       <!-- (filtered) Books -->
-      <h:dataTable value="#{bookBean.filteredBooks}" var="book" style="border-collapse: separate; border-spacing: 50px 5px;">
-      	<h:column>
+      <h:dataTable
+        value="#{bookBean.filteredBooks}"
+        var="book"
+        style="border-collapse: separate; border-spacing: 50px 5px"
+      >
+        <h:column>
           <f:facet name="header">Title</f:facet>
           #{book.title}
         </h:column>
@@ -65,13 +69,15 @@
         <h:column>
           <f:facet name="header">Writer</f:facet>
           #{book.writer.firstname} #{book.writer.lastname}
-        </h:column>  
+        </h:column>
         <h:column>
           <f:facet name="header">Details</f:facet>
-          <h:commandButton value="View Details" action="#{bookBean.viewBookDetails(book)}" />
-    </h:column>  
+          <h:commandButton
+            value="View Details"
+            action="#{bookBean.viewBookDetails(book)}"
+          />
+        </h:column>
       </h:dataTable>
-      
     </h:form>
   </h:body>
 </html>

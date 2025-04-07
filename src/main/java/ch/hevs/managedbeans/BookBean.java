@@ -29,6 +29,8 @@ public class BookBean implements Serializable {
     private List<Category> categories;
     private List<Writer> writers;
 
+    private Long selectedCategoryId;
+    private Long selectedWriterId;
     
     
     // Filter properties
@@ -131,23 +133,28 @@ public class BookBean implements Serializable {
 
     public String modifyBook() {
         try {
+            // Récupérer la catégorie et l'écrivain sélectionnés à partir de leurs IDs
+            Category selectedCategory = bookService.findCategoryById(selectedCategoryId);
+            Writer selectedWriter = bookService.findWriterById(selectedWriterId);
+            
+            // Mettre à jour la catégorie et l'écrivain
+            selectedBook.setCategory(selectedCategory);
+            selectedBook.setWriter(selectedWriter);
+            
+            // Le reste de votre code existant...
             bookService.updateBook(selectedBook);
             
-            // Refresh the book list
+            // Refresh book list
             books = bookService.getAllBooks();
             filteredBooks = books;
             
-            // Show success message
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                "Success", "Book modified successfully"));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Livre modifié avec succès"));
             
-            return "viewBooks.xhtml?faces-redirect=true";
+            return "viewBooks?faces-redirect=true";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "Could not modify book: " + e.getMessage()));
-            e.printStackTrace();
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", e.getMessage()));
             return null;
         }
     }
@@ -334,6 +341,24 @@ public class BookBean implements Serializable {
     public void setTitleFilter(String titleFilter) {
         this.titleFilter = titleFilter;
     }
+
+    public Long getSelectedCategoryId() {
+        return selectedBook != null && selectedBook.getCategory() != null ? 
+               selectedBook.getCategory().getId() : selectedCategoryId;
+    }
+
+    public void setSelectedCategoryId(Long id) {
+        this.selectedCategoryId = id;
+    }
+
+    public Long getSelectedWriterId() {
+        return selectedBook != null && selectedBook.getWriter() != null ? 
+               selectedBook.getWriter().getId() : selectedWriterId;
+    }
+
+    public void setSelectedWriterId(Long id) {
+        this.selectedWriterId = id;
+    }
 }
 
-   
+

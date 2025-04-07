@@ -1,57 +1,85 @@
 <!DOCTYPE html>
-<html 
-	xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
-    
-	<h:head>
-	    <title>Modify Book</title>
-	</h:head>
-	
-	<h:body>
-	    <h:form>
-	        <h2>Modify Book</h2>
-	        
-	        <h:panelGrid columns="2">
-	            <h:outputLabel for="title" value="Title:" />
-	            <h:inputText id="title" value="#{bookBean.selectedBook.title}" required="true" />
-	            
-	            <h:outputLabel for="releaseDate" value="Release Date:" />
-	            <h:inputText id="releaseDate" value="#{bookBean.selectedBook.releaseDate}">
-	                <f:convertDateTime pattern="yyyy-MM-dd" />
-	            </h:inputText>
-	            
-	            <h:outputLabel for="category" value="Category:" />
-	            <h:selectOneMenu id="category" value="#{bookBean.selectedBook.category}">
-	                <f:selectItems value="#{bookBean.categories}" var="category"
-	                               itemLabel="#{category.name}" itemValue="#{category}" />
-	            </h:selectOneMenu>
-	            
-	            <h:outputLabel for="writer" value="Writer:" />
-	            <h:selectOneMenu id="writer" value="#{bookBean.selectedBook.writer}">
-	                <f:selectItems value="#{bookBean.writers}" var="writer"
-	                               itemLabel="#{writer.firstname} #{writer.lastname}" itemValue="#{writer}" />
-	            </h:selectOneMenu>
-	            
-	            <!-- Type-specific fields -->
-	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Magazine'}">
-	                <h:outputLabel for="frequency" value="Release Frequency:" />
-	                <h:inputText id="frequency" value="#{bookBean.getAsMagazine().releaseFrequency}" />
-	            </h:panelGroup>
-	            
-	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Comic'}">
-	                <h:outputLabel for="colorized" value="Colorized:" />
-	                <h:selectBooleanCheckbox id="colorized" value="#{bookBean.getAsComic().colorized}" />
-	            </h:panelGroup>
-	            
-	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Novel'}">
-	                <h:outputLabel for="pocketSize" value="Pocket Size:" />
-	                <h:selectBooleanCheckbox id="pocketSize" value="#{bookBean.getAsNovel().pocketSize}" />
-	            </h:panelGroup>
-	        </h:panelGrid>
-	        
-	        <h:commandButton value="Save Changes" action="#{bookBean.modifyBook}" />
-	        <h:commandButton value="Cancel" action="viewBooks.xhtml?faces-redirect=true" immediate="true" />
-	    </h:form>
-	</h:body>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+>
+  <h:head>
+    <title>Modify Book</title>
+  </h:head>
+
+  <h:body>
+    <h:form>
+      <h2>Modify Book</h2>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel for="title" value="Title:" />
+        <h:inputText
+          id="title"
+          value="#{bookBean.selectedBook.title}"
+          required="true"
+        />
+
+        <h:outputLabel for="releaseDate" value="Release Date:" />
+        <h:inputText
+          id="releaseDate"
+          value="#{bookBean.selectedBook.releaseDate}"
+        >
+          <f:convertDateTime pattern="yyyy-MM-dd" />
+        </h:inputText>
+
+        <h:outputLabel for="category" value="Category:" />
+        <h:selectOneMenu id="category" value="#{bookBean.selectedCategoryId}">
+          <f:selectItems
+            value="#{bookBean.categories}"
+            var="category"
+            itemLabel="#{category.name}"
+            itemValue="#{category.id}"
+          />
+        </h:selectOneMenu>
+
+        <h:outputLabel for="writer" value="Writer:" />
+        <h:selectOneMenu id="writer" value="#{bookBean.selectedWriterId}">
+          <f:selectItems
+            value="#{bookBean.writers}"
+            var="writer"
+            itemLabel="#{writer.firstname} #{writer.lastname}"
+            itemValue="#{writer.id}"
+          />
+        </h:selectOneMenu>
+
+        <!-- Type-specific fields -->
+        <h:panelGroup rendered="#{bookBean.selectedType eq 'Magazine'}">
+          <h:outputLabel for="frequency" value="Release Frequency:" />
+          <h:inputText
+            id="frequency"
+            value="#{bookBean.getAsMagazine().releaseFrequency}"
+          />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{bookBean.selectedType eq 'Comic'}">
+          <h:outputLabel for="colorized" value="Colorized:" />
+          <h:selectBooleanCheckbox
+            id="colorized"
+            value="#{bookBean.getAsComic().colorized}"
+          />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{bookBean.selectedType eq 'Novel'}">
+          <h:outputLabel for="pocketSize" value="Pocket Size:" />
+          <h:selectBooleanCheckbox
+            id="pocketSize"
+            value="#{bookBean.getAsNovel().pocketSize}"
+          />
+        </h:panelGroup>
+      </h:panelGrid>
+
+      <h:commandButton value="Save Changes" action="#{bookBean.modifyBook}" />
+      <h:commandButton
+        value="Cancel"
+        action="viewBooks.xhtml?faces-redirect=true"
+        immediate="true"
+      />
+    </h:form>
+  </h:body>
 </html>
