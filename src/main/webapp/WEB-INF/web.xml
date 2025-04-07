@@ -48,21 +48,26 @@
   <display-name>TP12-WEB-EJB-PC-EPC-DAO-E</display-name>
   
   <!-- Security configurations -->
+  
+  <!-- Only accessible by admin -->
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Admin Pages</web-resource-name>
+      <url-pattern>/manageBooks.xhtml</url-pattern>
       <url-pattern>/modifyBook.xhtml</url-pattern>
+      <url-pattern>/addBook.xhtml</url-pattern>
+      <url-pattern>/history.xhtml</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
 
+  <!-- Only accessible by logged in users (user or admin) -->
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>User Pages</web-resource-name>
       <url-pattern>/viewBooks.xhtml</url-pattern>
-      <url-pattern>/addBook.xhtml</url-pattern>
       <url-pattern>/bookDetails.xhtml</url-pattern>
     </web-resource-collection>
     <auth-constraint>
@@ -71,16 +76,7 @@
     </auth-constraint>
   </security-constraint>
 
-  <!-- Contrainte de sécurité pour la page Manage Books -->
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>Manage Books</web-resource-name>
-      <url-pattern>/manageBooks.xhtml</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>admin</role-name>
-    </auth-constraint>
-  </security-constraint>
+
 
   <login-config>
     <auth-method>FORM</auth-method>
