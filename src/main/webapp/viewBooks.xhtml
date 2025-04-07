@@ -65,7 +65,11 @@
         <h:column>
           <f:facet name="header">Writer</f:facet>
           #{book.writer.firstname} #{book.writer.lastname}
-        </h:column>    
+        </h:column>  
+        <h:column>
+          <f:facet name="header">Details</f:facet>
+          <h:commandButton value="View Details" action="#{bookBean.viewBookDetails(book)}" />
+    </h:column>  
       </h:dataTable>
       
     </h:form>
