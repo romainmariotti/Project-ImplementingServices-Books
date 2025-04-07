@@ -3,8 +3,10 @@
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
 >
   <h:body>
+    <ui:include src="WEB-INF/templates/navbar.xhtml" />
     <h:form>
       <h:dataTable value="#{bookBean.books}" var="book">
         <h:column>
@@ -13,12 +15,17 @@
         </h:column>
         <h:column>
           <f:facet name="header">Actions</f:facet>
-          <h:commandButton value="Modify" action="#{bookBean.prepareModifyBook(book)}" />
-          <h:commandButton value="Delete" action="#{bookBean.deleteBook(book)}" onclick="return confirm('Are you sure you want to delete this book?')"/>
+          <h:commandButton
+            value="Modify"
+            action="#{bookBean.prepareModifyBook(book)}"
+          />
+          <h:commandButton
+            value="Delete"
+            action="#{bookBean.deleteBook(book)}"
+            onclick="return confirm('Are you sure you want to delete this book?')"
+          />
         </h:column>
-        
       </h:dataTable>
-      
     </h:form>
   </h:body>
 </html>
