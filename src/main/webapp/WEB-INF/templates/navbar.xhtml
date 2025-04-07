@@ -20,6 +20,14 @@
           value="Manage Books"
           action="manageBooks.xhtml?faces-redirect=true"
         />
+        |
+        <h:commandLink value="Logout" action="#{bookBean.logout()}" />
+      </h:panelGroup>
+      <br />
+      <h:panelGroup>
+        <h:outputText
+          value="Connected as: &quot;#{empty request.remoteUser ? '' : request.remoteUser}&quot;"
+        />
       </h:panelGroup>
     </h:form>
   </h:body>

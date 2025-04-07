@@ -359,6 +359,14 @@ public class BookBean implements Serializable {
     public void setSelectedWriterId(Long id) {
         this.selectedWriterId = id;
     }
+
+    public String logout() {
+        // Invalide la session courante
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        
+        // Redirige vers la page de login
+        return "/login.xhtml?faces-redirect=true";
+    }
 }
 
 
