@@ -5,7 +5,7 @@ import java.util.List;
 import jakarta.ejb.Local;
 
 @Local
-public interface AdminHistory {
+public interface History {
 
     void addAction(String action);
 

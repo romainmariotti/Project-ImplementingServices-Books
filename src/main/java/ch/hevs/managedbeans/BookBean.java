@@ -2,6 +2,7 @@ package ch.hevs.managedbeans;
 
 import ch.hevs.businessobject.*;
 import ch.service.BookServiceLocal;
+import ch.service.History;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
@@ -12,6 +13,7 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.inject.Inject; 
 import java.util.stream.Collectors;
 
 
@@ -21,6 +23,9 @@ public class BookBean implements Serializable {
 
     @EJB
     private BookServiceLocal bookService;
+
+    @Inject
+    private History history;
 
     private List<Book> books;
     private List<Book> filteredBooks; // New list for filtered results
@@ -57,7 +62,15 @@ public class BookBean implements Serializable {
     
     public String addBook(Book book) {
         try {
-            // Set type-specific properties based on the selected type
+            // Récupérer la catégorie et l'écrivain à partir des IDs
+            Category category = bookService.findCategoryById(selectedCategoryId);
+            Writer writer = bookService.findWriterById(selectedWriterId);
+            
+            // Assigner la catégorie et l'écrivain au livre
+            book.setCategory(category);
+            book.setWriter(writer);
+            
+            // Le reste du code reste identique
             if ("Magazine".equals(selectedType)) {
                 Magazine magazine = (Magazine) book;
                 magazine.setReleaseFrequency(getAsMagazine().getReleaseFrequency());
@@ -74,18 +87,22 @@ public class BookBean implements Serializable {
                 bookService.addBook(novel);
             }
             
-            // Refresh the book list
-            books = bookService.getAllBooks();
-            filteredBooks = new ArrayList<>(books);
+            refreshBooks();
             
-            // Reset the form
+            // Ajouter l'action à l'historique
+            history.addAction("Added book: " + book.getTitle());
+            
+            // Reset form
             selectedBook = null;
             selectedType = null;
+            selectedCategoryId = null;
+            selectedWriterId = null;
             
-            return "viewBooks.xhtml?faces-redirect=true"; // Redirect to view page
+            return "viewBooks.xhtml?faces-redirect=true";
         } catch (Exception e) {
+            history.addAction("Failed to add book: " + e.getMessage());
             e.printStackTrace();
-            return null; // Stay on same page if error occurs
+            return null;
         }
     }
     
@@ -101,11 +118,14 @@ public class BookBean implements Serializable {
             books.remove(book);
             filteredBooks.remove(book);
             
+            history.addAction("Deleted book: " + book.getTitle());
+            
             // Show success message
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Success", "Book deleted successfully"));
         } catch (Exception e) {
+            history.addAction("Failed to delete book: " + e.getMessage());
             // Show error message
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -143,6 +163,7 @@ public class BookBean implements Serializable {
             
             // Le reste de votre code existant...
             bookService.updateBook(selectedBook);
+            history.addAction("Modified book: " + selectedBook.getTitle());
             
             // Refresh book list
             books = bookService.getAllBooks();
@@ -153,6 +174,7 @@ public class BookBean implements Serializable {
             
             return "viewBooks?faces-redirect=true";
         } catch (Exception e) {
+            history.addAction("Failed to modify book: " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", e.getMessage()));
             return null;

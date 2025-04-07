@@ -34,21 +34,21 @@
           <h:inputText value="#{bookBean.selectedBook.title}" />
 
           <h:outputLabel value="Category: " />
-          <h:selectOneMenu value="#{bookBean.selectedBook.category}">
+          <h:selectOneMenu value="#{bookBean.selectedCategoryId}">
             <f:selectItems
               value="#{bookBean.categories}"
               var="category"
-              itemValue="#{category}"
+              itemValue="#{category.id}"
               itemLabel="#{category.name}"
             />
           </h:selectOneMenu>
 
           <h:outputLabel value="Writer: " />
-          <h:selectOneMenu value="#{bookBean.selectedBook.writer}">
+          <h:selectOneMenu value="#{bookBean.selectedWriterId}">
             <f:selectItems
               value="#{bookBean.writers}"
               var="writer"
-              itemValue="#{writer}"
+              itemValue="#{writer.id}"
               itemLabel="#{writer.firstname} #{writer.lastname}"
             />
           </h:selectOneMenu>
