@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+>
+  <h:body>
+    <h:form>
+    	<h2>Book Details</h2>
+    		
+    		<h:panelGrid columns="2">
+            <!-- Common Book Fields -->
+            
+                <span >Type:</span>
+                <h:outputText value="#{bookBean.selectedType}"/>
+            
+            
+            
+                <span class="detail-label">Title:</span>
+                <h:outputText value="#{bookBean.selectedBook.title}"/>
+            
+            
+            
+                <span class="detail-label">Release Date:</span>
+                <h:outputText value="#{bookBean.selectedBook.releaseDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:outputText>
+            
+            
+            
+                <span class="detail-label">Category:</span>
+                <h:outputText value="#{bookBean.selectedBook.category.name}"/>
+           
+            
+            
+                <span class="detail-label">Writer:</span>
+                <h:outputText value="#{bookBean.selectedBook.writer.firstname} #{bookBean.selectedBook.writer.lastname}"/>
+                
+             </h:panelGrid>
+            
+        
+        
+	       		 <!-- Type-Specific Details Section -->
+	
+	            <!-- Magazine Details -->
+	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Magazine'}">         
+	              <span class="detail-label">Release Frequency:</span>
+	              <h:outputText value="#{bookBean.getAsMagazine().releaseFrequency}"/>          
+	            </h:panelGroup>
+	            
+	             <!-- Comic Details -->
+	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Comic'}">         
+	              <span class="detail-label">Colorized:</span>
+	              <h:outputText value="#{bookBean.getAsComic().colorized ? 'Yes' : 'No'}"/>          
+	            </h:panelGroup>
+	            
+	            
+	            
+	            <!-- Novel Details -->
+	            <h:panelGroup rendered="#{bookBean.selectedType eq 'Novel'}">         
+	              <span class="detail-label">Pocket Size:</span>
+	              <h:outputText value="#{bookBean.getAsNovel().pocketSize ? 'Yes' : 'No'}"/>  
+	            </h:panelGroup>
+            
+            
+
+           		<!-- Back to list button -->
+        		<h:commandButton value="Back to List" action="viewBooks.xhtml?faces-redirect=true" 
+                         style="margin-top: 20px;"/>
+
+    	
+
+      
+    </h:form>
+  </h:body>
+</html>

@@ -40,10 +40,6 @@ public class BookBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        //books = bookService.getAllBooks(); // Charger tous les livres par défaut
-        //filteredBooks = books; // Initialize with all books
-        //categories = bookService.getAllCategories();
-        //writers = bookService.getAllWriters();
     	refreshBooks();
     }
     
@@ -154,6 +150,22 @@ public class BookBean implements Serializable {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    
+    public String viewBookDetails(Book book) {
+        this.selectedBook = book;
+        
+        // Determine the book type for proper display
+        if (book instanceof Magazine) {
+            selectedType = "Magazine";
+        } else if (book instanceof Comic) {
+            selectedType = "Comic";
+        } else if (book instanceof Novel) {
+            selectedType = "Novel";
+        }
+        
+        return "bookDetails.xhtml?faces-redirect=true";
     }
     
     
